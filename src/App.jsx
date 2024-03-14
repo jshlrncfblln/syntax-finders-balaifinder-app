@@ -4,7 +4,9 @@ import Home from './pages/Home'
 import Properties from './pages/Properties'
 import { Route, Routes } from 'react-router-dom'
 import Dashboard from './realtor/dashboard'
-
+import ManageProperty from './realtor/Manage-Property'
+import Inbox from './realtor/Inbox'
+import Settings from './realtor/Settings'
 function App() {
   return (
     <div className='App'>
