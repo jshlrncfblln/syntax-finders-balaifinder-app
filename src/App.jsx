@@ -3,8 +3,8 @@ import About from './pages/About'
 import Home from './pages/Home'
 import Properties from './pages/Properties'
 import { Route, Routes } from 'react-router-dom'
-import Dashboard from './realtor/dashboard'
-import ManageProperty from './realtor/Manage-Property'
+import Dashboard from './realtor/Dashboard'
+import Manage from './realtor/Manage-Property'
 import Inbox from './realtor/Inbox'
 import Settings from './realtor/Settings'
 function App() {
@@ -24,7 +24,7 @@ function RealtorRoutes(){
   return(
     <Routes>
       <Route path="/" element={<Dashboard />} />
-      <Route path="/manage-property" element={<ManageProperty />} />
+      <Route path="/manage-property" element={<Manage />} />
       <Route path="/inbox" element={<Inbox />} />
       <Route path="/settings" element={<Settings />} />
   </Routes>
