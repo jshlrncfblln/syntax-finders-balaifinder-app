@@ -1,7 +1,32 @@
-import { Link, useMatch, useResolvedPath } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useMatch, useResolvedPath, useNavigate } from 'react-router-dom';
+import { useState, useContext } from 'react';
+import { AuthContext } from "../context/authContext";
 
 function LoginModal({ isOpen, onClose }) {
+    const [inputs, setInputs] = useState({
+        email: "",
+        password: "",
+    });
+    const [err, setErr] = useState(null);
+
+    const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+    const { login } = useContext(AuthContext);
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            await login(inputs);
+            navigate("/");
+            onClose(); // Close the modal upon successful login
+        } catch (err) {
+            setErr(err.response.data);
+        }
+    };
+
     const [showPassword, setShowPassword] = useState(true);
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -27,13 +52,13 @@ function LoginModal({ isOpen, onClose }) {
                     <p className="text-xl text-gray-600 text-center">Welcome Back!</p>
                     <div className="mt-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
-                        <input type="email" className="bg-gray-200 text-gray-700 focus:outline-sky-600 focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" />
+                        <input type="email" name="email" onChange={handleChange} className="bg-gray-200 text-gray-700 focus:outline-sky-600 focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" />
                     </div>
                     <div className="mt-4">
                         <div className="flex justify-between">
                             <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
                         </div>
-                        <input type={showPassword ? 'text' : 'password'} className="bg-gray-200 text-gray-700 focus:outline-sky-600 focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" />
+                        <input type={showPassword ? 'text' : 'password'} name="password" onChange={handleChange} className="bg-gray-200 text-gray-700 focus:outline-sky-600 focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" />
                         <div className="mt-3">
                             <label className="inline-flex items-center" htmlFor="showPassCheck">
                                 <input type="checkbox" id="showPassCheck"
@@ -44,12 +69,15 @@ function LoginModal({ isOpen, onClose }) {
                             </label>
                         </div>
                     </div>
+                    {err && err}
                     <div className="mt-8">
-                        <button className="bg-sky-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-sky-500">Create Account</button>
+                        <button onClick={handleLogin} className="bg-sky-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-sky-500">Login</button>
                     </div>
                     <div className="mt-5 flex items-center justify-between">
                         <span className="border-b border-gray-500 w-1/5 md:w-1/4"></span>
-                        <p className="text-xs text-gray-500 uppercase" >Or Create Account</p>
+                        <Link to="/register">
+                            <p className="text-xs text-gray-500 uppercase" >Or Create Account</p>
+                        </Link>
                         <span className="border-b border-gray-500 w-1/5 md:w-1/4"></span>
                     </div>
                 </div>
@@ -58,9 +86,11 @@ function LoginModal({ isOpen, onClose }) {
     );
 }
 
-export default function Navbar() {
+function Navbar() {
+    const { currentUser, login, logout } = useContext(AuthContext);
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenLoginModal, setIsOpenLoginModal] = useState(false);
+    const navigate = useNavigate();
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
@@ -73,6 +103,18 @@ export default function Navbar() {
 
     const closeMenu = () => {
         setIsOpen(false);
+    };
+
+    const handleLogout = async () => {
+        try {
+            // Call the logout function from the context
+            await logout();
+
+            // Redirect the user to the home page
+            navigate("/");
+        } catch (error) {
+            console.error("Error logging out:", error);
+        }
     };
 
     return (
@@ -102,7 +144,11 @@ export default function Navbar() {
                         <li><CustomLink to="/about" className="underline-hover relative p-2 font-semibold">About Us</CustomLink></li>
                         <li><CustomLink to="/properties" className="underline-hover relative p-2 font-semibold">Properties</CustomLink></li>
                         <li><CustomLink to="/match" className="underline-hover relative p-2 font-semibold">Match Up</CustomLink></li>
-                        <li><button onClick={toggleLoginModal} className="rounded-lg bg-sky-500 px-8 py-1.5">Login</button></li>
+                        {currentUser ? (
+                            <li><button onClick={handleLogout} className="rounded-lg bg-sky-500 px-8 py-1.5">Logout</button></li>
+                        ) : (
+                            <li><button onClick={toggleLoginModal} className="rounded-lg bg-sky-500 px-8 py-1.5">Login</button></li>
+                        )}
                     </ul>
                 </div>
             </div>
@@ -111,12 +157,18 @@ export default function Navbar() {
                 <li><CustomLink to="/about" className="underline-hover relative p-2 font-semibold">About Us</CustomLink></li>
                 <li><CustomLink to="/properties" className="underline-hover relative p-2 font-semibold">Properties</CustomLink></li>
                 <li><CustomLink to="/match" className="underline-hover relative p-2 font-semibold">Match Up</CustomLink></li>
-                <li><button onClick={toggleLoginModal} className="hover:bg-sky-700 bg-sky-500 px-6 py-1.5 rounded-lg text-white">Login</button></li>
+                {currentUser ? (
+                    <li><button onClick={handleLogout} className="hover:bg-sky-700 bg-sky-500 px-6 py-1.5 rounded-lg text-white">Logout</button></li>
+                ) : (
+                    <li><button onClick={toggleLoginModal} className="hover:bg-sky-700 bg-sky-500 px-6 py-1.5 rounded-lg text-white">Login</button></li>
+                )}
             </ul>
             <LoginModal isOpen={isOpenLoginModal} onClose={() => setIsOpenLoginModal(false)} />
         </div>
     );
 }
+
+export default Navbar;
 
 
 function CustomLink({ to, children, ...props }) {

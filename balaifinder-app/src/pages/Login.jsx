@@ -42,7 +42,7 @@ function Login (){
                         </div>
                     </div>
                     <div className="mt-8">
-                        <button className="bg-sky-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-sky-500">Create Account</button>
+                        <button className="bg-sky-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-sky-500">Login</button>
                     </div>
                     <div className="mt-5 flex items-center justify-between">
                         <span className="border-b border-gray-500 w-1/5 md:w-1/4"></span>
