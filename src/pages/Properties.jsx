@@ -21,11 +21,11 @@ function Properties(){
                     </div>
                     <div class="flex w-11/12 md:w-8/12 xl:w-6/12">
                         <div class="flex rounded-md w-full">
-                            <input type="text" name="q"
-                                class="w-full p-3 rounded-md rounded-r-none border border-2 border-gray-300 placeholder-gray-400 focus:outline-sky-600 "
+                            <input type="text"
+                                class="w-full p-3 rounded-md rounded-r-none border border-2 border-sky-300 placeholder-gray-400 focus:outline-sky-700 "
                                 placeholder="Search for Location, Price, or Type of Property ..."  />
                             <button
-                                class="inline-flex items-center gap-2 bg-violet-700 text-white text-lg font-semibold py-3 px-6 rounded-r-md">
+                                class="inline-flex items-center gap-2 bg-sky-500 text-white text-lg font-semibold py-3 px-6 rounded-r-md">
                                 <span>Find</span>
                                 <svg class="text-gray-200 h-5 w-5 p-0 fill-current" xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px"

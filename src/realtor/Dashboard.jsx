@@ -1,9 +1,13 @@
-export default function Dashboard(){
-    return(
-        <section>
-            <div>
-                <h1>this is the dashboard</h1>
-            </div>
-        </section>
-    )
+
+import DashboardNavbar from '../components/DashboardNavbar'
+
+
+function Dashboard() {
+  return (
+    <nav>
+        <DashboardNavbar/>
+    </nav>
+  )
 }
+
+export default Dashboard;
