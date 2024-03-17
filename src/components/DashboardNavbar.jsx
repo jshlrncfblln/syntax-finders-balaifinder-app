@@ -1,49 +1,21 @@
-import React, { useState } from 'react';
-import { FaSun, FaMoon } from 'react-icons/fa';
+import { Popover } from '@headlessui/react'
 
-const Navbar = () => {
-    const [isDarkMode, setIsDarkMode] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-    const toggleTheme = () => {
-        setIsDarkMode(!isDarkMode);
-        // You can add logic here to toggle your theme classes or apply a CSS class to the body element
-    };
-
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
-
-    return (
-        <nav className={`bg-${isDarkMode ? 'gray-900' : 'slate-100'} p-4`}>
-            <div className="flex justify-between items-center">
-                <div className={`text-${isDarkMode ? 'white' : 'black'} font-bold`}>Balai<span className='text-sky-400'>Finder</span></div>
-                <div className="flex items-center">
-                    <div className={`ml-4 mr-2 text-${isDarkMode ? 'white' : 'black'}`} onClick={toggleMenu}>Welcome, User</div>
-                    <img
-                        src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=626&ext=jpg"
-                        alt="Profile"
-                        className="h-8 w-8 rounded-full cursor-pointer relative"
-                        onClick={toggleMenu}
-                    />
-                    {isMenuOpen && (
-                        <div className="absolute ml-4 mt-2 w-40 bg-white rounded shadow-lg">
-                            <ul>
-                                <li className="p-2 hover:bg-gray-200 cursor-pointer">Profile</li>
-                                <li className="p-2 hover:bg-gray-200 cursor-pointer">Logout</li>
-                            </ul>
-                        </div>
-                    )}
+export default function DashboardNavbar(){
+    return(
+        <nav className=''>
+            <div class="mx-auto max-w-screen-xl px-6 lg:px-8 relative">
+                <div class="relative flex h-16 space-x-10 w-full">
+                <div class="flex justify-start"><a class="flex flex-shrink-0 items-center" href="/">
+                    <img class="block h-8 w-auto" src="./src/assets/BalaiFinder.png" />
+                    </a>
                 </div>
-                <button
-                    onClick={toggleTheme}
-                    className={`flex items-center ml-4 bg-${isDarkMode ? 'yellow-300' : 'gray-100'} text-${isDarkMode ? 'white' : 'black'} px-3 py-2 rounded-full`}
-                >
-                    {isDarkMode ? <FaSun /> : <FaMoon />}
-                </button>
+                <div class="flex-shrink-0 flex px-2 py-3 items-center space-x-8 flex-1 justify-end justify-self-end "><a
+                    class="text-gray-700 hover:text-lime-700 text-sm font-medium" href="/login">Login</a>
+                    <a class="text-white bg-gray-800 hover:bg-gray-900 inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm "
+                    href="/signup">Sign up</a>
+                </div>
+                </div>
             </div>
         </nav>
-    );
-};
-
-export default Navbar;
+    )
+}
