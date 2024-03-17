@@ -10,6 +10,7 @@ import Settings from './realtor/Settings'
 import { BiMessageDetail } from "react-icons/bi"
 import { useState } from 'react'
 import Contact from './components/Contact'
+import Layout from './components/DashboardSidebar'
 
 function App() {
   const [isOpenContactModal, setIsOpenContactModal] = useState(false);
@@ -51,12 +52,14 @@ function App() {
 
 function RealtorRoutes() {
   return (
-    <Routes>
-      <Route path="/" element={<Dashboard />} />
-      <Route path="/manage-property" element={<Manage />} />
-      <Route path="/inbox" element={<Inbox />} />
-      <Route path="/settings" element={<Settings />} />
-    </Routes>
+    <Layout>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/manage-property" element={<Manage />} />
+        <Route path="/inbox" element={<Inbox />} />
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
+    </Layout>
   );
 }
 
