@@ -1,7 +1,9 @@
-export default function Manage(){
+export default function ManageProperty(){
     return(
-        <div>
-            <h1>this is manage</h1>
-        </div>
+        <section>
+            <div>
+                <h1>this is the Manage Property</h1>
+            </div>
+        </section>
     )
 }

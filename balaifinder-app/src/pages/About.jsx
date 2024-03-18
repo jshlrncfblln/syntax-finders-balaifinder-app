@@ -1,5 +1,5 @@
 import Footer from "../components/Footer"
-import Navbar from "../components/Navbar"
+import Navbar from "../components/navbar"
 import { FaFacebook } from "react-icons/fa"
 import { FaInstagram } from "react-icons/fa"
 import { FaGithub } from "react-icons/fa"
