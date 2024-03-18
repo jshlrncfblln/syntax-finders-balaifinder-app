@@ -81,9 +81,9 @@ function About() {
               </p>
               {/*Social Media Links*/}
               <div className="mt-8 mb-8 flex justify-center">
-                <a href="https://www.facebook.com/kuyafabi/" className="flex items-center justify-start m-2"><FaFacebook className="size-10"/><span className="ml-2">Joshua Laurence</span></a>
-                <a href="" className="flex items-center justify-start m-2"><FaInstagram className="size-10"/><span className="ml-2">Joshua Laurence</span></a>
-                <a href="" className="flex items-center justify-start m-2"><FaGithub className="size-10"/><span className="ml-2">Joshua Laurence</span></a>
+                <a href="https://www.facebook.com/kuyafabi/" className="flex items-center justify-start m-2"><FaFacebook className="size-10"/><span className="ml-2">Vince Edward</span></a>
+                <a href="" className="flex items-center justify-start m-2"><FaInstagram className="size-10"/><span className="ml-2">Vince Edward</span></a>
+                <a href="" className="flex items-center justify-start m-2"><FaGithub className="size-10"/><span className="ml-2">Vince Edward</span></a>
               </div>
               <hr class="border-t-2 border-gray-900" />            
             </div>
@@ -131,9 +131,9 @@ function About() {
               </p>
               {/*Social Media Links*/}
               <div className="mt-8 mb-8 flex justify-center">
-                <a href="https://www.facebook.com/kuyafabi/" className="flex items-center justify-start m-2"><FaFacebook className="size-10"/><span className="ml-2">Joshua Laurence</span></a>
-                <a href="" className="flex items-center justify-start m-2"><FaInstagram className="size-10"/><span className="ml-2">Joshua Laurence</span></a>
-                <a href="" className="flex items-center justify-start m-2"><FaGithub className="size-10"/><span className="ml-2">Joshua Laurence</span></a>
+                <a href="https://www.facebook.com/kuyafabi/" className="flex items-center justify-start m-2"><FaFacebook className="size-10"/><span className="ml-2">Paul Adrien</span></a>
+                <a href="" className="flex items-center justify-start m-2"><FaInstagram className="size-10"/><span className="ml-2">Paul Adrien</span></a>
+                <a href="" className="flex items-center justify-start m-2"><FaGithub className="size-10"/><span className="ml-2">Paul Adrien</span></a>
               </div>
               <hr class="border-t-2 border-gray-900" />
             </div>
@@ -161,9 +161,9 @@ function About() {
               </p>
               {/*Social Media Links*/}
               <div className="mt-8 mb-8 flex justify-center">
-                <a href="https://www.facebook.com/kuyafabi/" className="flex items-center justify-start m-2"><FaFacebook className="size-10"/><span className="ml-2">Joshua Laurence</span></a>
-                <a href="" className="flex items-center justify-start m-2"><FaInstagram className="size-10"/><span className="ml-2">Joshua Laurence</span></a>
-                <a href="" className="flex items-center justify-start m-2"><FaGithub className="size-10"/><span className="ml-2">Joshua Laurence</span></a>
+                <a href="https://www.facebook.com/kuyafabi/" className="flex items-center justify-start m-2"><FaFacebook className="size-10"/><span className="ml-2">Jumyl Reyes</span></a>
+                <a href="" className="flex items-center justify-start m-2"><FaInstagram className="size-10"/><span className="ml-2">Jumyl Reyes</span></a>
+                <a href="" className="flex items-center justify-start m-2"><FaGithub className="size-10"/><span className="ml-2">Jumyl Reyes</span></a>
               </div>
               <hr class="border-t-2 border-gray-900" />              
             </div>
