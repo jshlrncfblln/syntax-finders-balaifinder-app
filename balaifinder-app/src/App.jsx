@@ -15,7 +15,6 @@ import ManageProperty from './realtor/Manage-Property'
 import { useContext } from 'react'
 import { AuthContext } from './context/authContext'
 import Register from './pages/Register'
-import ResultPage from './pages/ResultPage'
 import MatchUp from './pages/MatchUp'
 
 function App() {
@@ -45,8 +44,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/properties" element={<Properties />} />
-        <Route path="/MatchUp" element={<MatchUp />} />
-        <Route path="/ResultPage" element={<ResultPage />} />
+        <Route path="/match_up" element={<MatchUp />} />
         <Route path="/register" element={<Register />} />
         <Route path="/realtor/*" element={<RealtorRoutes />} />
       </Routes>

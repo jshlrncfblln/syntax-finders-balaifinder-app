@@ -143,8 +143,7 @@ function Navbar() {
                         <li><CustomLink to="/" className="p-2 underline-hover relative font-semibold">Home</CustomLink></li>
                         <li><CustomLink to="/about" className="underline-hover relative p-2 font-semibold">About Us</CustomLink></li>
                         <li><CustomLink to="/properties" className="underline-hover relative p-2 font-semibold">Properties</CustomLink></li>
-                        <li><CustomLink to="/MatchUp" className="underline-hover relative p-2 font-semibold">Match Up</CustomLink></li>
-                        <li><CustomLink to="/ResultPage" className="underline-hover relative p-2 font-semibold">Match Up Result</CustomLink></li>
+                        <li><CustomLink to="/match_up" className="underline-hover relative p-2 font-semibold">Match Up</CustomLink></li>
                         {currentUser ? (
                             <li><button onClick={handleLogout} className="rounded-lg bg-sky-500 px-8 py-1.5">Logout</button></li>
                         ) : (
@@ -157,8 +156,7 @@ function Navbar() {
                 <li><CustomLink to="/" className="p-2 underline-hover relative font-semibold">Home</CustomLink></li>
                 <li><CustomLink to="/about" className="underline-hover relative p-2 font-semibold">About Us</CustomLink></li>
                 <li><CustomLink to="/properties" className="underline-hover relative p-2 font-semibold">Properties</CustomLink></li>
-                <li><CustomLink to="/MatchUp" className="underline-hover relative p-2 font-semibold">Match Up</CustomLink></li>
-                <li><CustomLink to="/ResultPage" className="underline-hover relative p-2 font-semibold">Match Up Result</CustomLink></li>
+                <li><CustomLink to="/match_up" className="underline-hover relative p-2 font-semibold">Match Up</CustomLink></li>
                 {currentUser ? (
                     <li><button onClick={handleLogout} className="hover:bg-sky-700 bg-sky-500 px-6 py-1.5 rounded-lg text-white">Logout</button></li>
                 ) : (
