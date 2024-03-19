@@ -1,17 +1,18 @@
 import Footer from "./Footer";
 import Navbar from "./navbar";
 
-export default function Introduction({showSettings}){
-    return(
+export default function Introduction() {
+    return (
         <div>
-            <Navbar/>
+            <Navbar />
             <div>
                 <div class="mx-auto flex flex-col items-center py-12 sm:py-24">
                     <div class="w-11/12 sm:w-2/3 lg:flex justify-center items-center flex-col mb-5 sm:mb-10">
                         <h1
                             class="text-4xl sm:text-5xl md:text-5xl lg:text-5xl xl:text-6xl text-center text-gray-800 font-black leading-10">
                             Welcome to Balai<span class="text-sky-500">Finder </span>
-                             a <span class="text-sky-500">Matching </span> site for Home<span class="text-sky-500">buyers. </span>
+                            a <span class="text-sky-500">Matching </span> site for Home<span
+                                class="text-sky-500">buyers. </span>
                         </h1>
                         <p class="mt-5 sm:mt-10 lg:w-10/12 text-gray-500 font-normal text-center text-xl">
                             BalaiFinder is a matching site that uses advanced algorithms to help home buyers find their dream homes effortlessly.
@@ -19,7 +20,7 @@ export default function Introduction({showSettings}){
                     </div>
                     <div class="flex w-11/12 md:w-8/12 xl:w-6/12">
                         <div class="flex rounded-md w-full items-center justify-center">
-                            <button onClick={showSettings} class="flex items-center gap-2 bg-sky-500 text-white text-lg font-semibold py-3 px-6 rounded-md hover:bg-sky-700">
+                            <button class="flex items-center gap-2 bg-sky-500 text-white text-lg font-semibold py-3 px-6 rounded-md hover:bg-sky-700">
                                 <span>Find My House Now!</span>
                                 <svg class="text-gray-200 h-5 w-5 p-0 fill-current" xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px"
