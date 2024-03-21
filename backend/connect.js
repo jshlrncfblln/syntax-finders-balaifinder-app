@@ -1,26 +1,13 @@
-require("dotenv0").config();
 import mysql from "mysql";
+import * as dotenv from 'dotenv';
 
-const urlDB = "mysql://root:nrckHamrmWoNPbwPxMYAqXoZxGfsfFOA@roundhouse.proxy.rlwy.net:11389/railway"
+dotenv.config();
 
+//IMPORTANT TIGNAN MO SA .ENV FILE KUNG LOCAL O LIVE DB BA YUNG GAGAMITIN MO
 
 export const db = mysql.createConnection({
   host: process.env.DB_HOST,
-  user: process.env.DB_USER,
+  user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
+  database: process.env.DB_DNAME,
 });
-
-
-
-
-// OLD CODE FOR LOCALHOST
-
-//import mysql from "mysql";
-
-//export const db = mysql.createConnection({
-  //host: "localhost",
-  //user: "root",
-  ////password: "",
-  //database: "balaifinder_database",
-//});
