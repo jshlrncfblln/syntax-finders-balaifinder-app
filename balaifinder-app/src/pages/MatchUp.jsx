@@ -2,6 +2,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/navbar";
 import { useState } from 'react'
 import PreferenceSettingsModal from "../components/PreferenceSettings"
+import ResultSection from "../components/ResultSection";
 
 export default function Introduction() {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
@@ -44,6 +45,7 @@ export default function Introduction() {
                         </div>
                     </div>
                 </div>
+                <ResultSection/>
             </div>
             {showSettingsModal && <PreferenceSettingsModal onClose={closeSettingsModal} />}
             <Footer/>

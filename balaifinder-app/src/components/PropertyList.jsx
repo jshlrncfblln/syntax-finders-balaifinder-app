@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react"
 import axios from "axios"
+import { backendurl } from "../../backend-connector";
 
 
 export default function PropLists(){
@@ -7,7 +8,7 @@ export default function PropLists(){
     const [data, setData] = useState([])
 
     const loadData = async () => {
-        const response = await axios.get("http://localhost:8800/api/get/properties")
+        const response = await axios.get(`${ backendurl }/api/get/properties`)
         setData(response.data)
     }
 

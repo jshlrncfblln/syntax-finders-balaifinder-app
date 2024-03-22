@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Navbar from './navbar';
-import Footer from './Footer';
+import { backendurl } from "../../backend-connector";
 
-function ResultPage() {
+function ResultSection() {
   const [data, setData] = useState([]);
 
   const loadData = async () => {
-    const response = await axios.get('http://localhost:8800/api/get');
+    const response = await axios.get(`${ backendurl }/api/get`);
     setData(response.data);
   };
 
@@ -16,18 +15,6 @@ function ResultPage() {
   }, []);
 
   return (
-    <div>
-      <Navbar />
-      <div className="mx-auto flex flex-col items-center py-12 sm:py-24">
-        <div className="w-11/12 sm:w-2/3 lg:flex justify-center items-center flex-col mb-5 sm:mb-10">
-          <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-5xl xl:text-6xl text-center text-gray-800 font-black leading-10">
-            We matched your
-            <span className="text-sky-500"> Ideal Home </span>
-            according to your preferences
-          </h1>
-        </div>
-      </div>
-
       <section className="w-fit mx-auto grid grid-cols lg:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-10">
         {data.map((item, index) => (
           <div key={item._id} className="w-72 bg-white shadow-md rounded-xl hover:shadow-sky-600 duration-500 hover:scale-105 hover:shadow-xl">
@@ -51,9 +38,7 @@ function ResultPage() {
           </div>
         ))}
       </section>
-      <Footer />
-    </div>
   );
 }
 
-export default ResultPage;
+export default ResultSection;

@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { GrClose } from "react-icons/gr";
 import axios from "axios";
+import { backendurl } from "../../backend-connector";
 
 function PreferenceSettings({ onClose, onSubmit }) {
   const [locationData, setLocationData] = useState([]);
   const [typeData, setTypeData] = useState([]);
   const [priceData, setPriceData] = useState([]);
+  const [nearMallData, setnearMallData] = useState([]);
+  const [nearChurchData, setnearChurchData] = useState([]);
+  const [nearSchoolData, setnearSchoolData] = useState([]);
   const [formData, setFormData] = useState({
     price: "",
     location: "",
@@ -19,9 +23,9 @@ function PreferenceSettings({ onClose, onSubmit }) {
 
   const loadData = async () => {
     const [locationResponse, typeResponse, priceResponse] = await Promise.all([
-      axios.get("http://localhost:8800/api/get/option/location"),
-      axios.get("http://localhost:8800/api/get/option/type"),
-      axios.get("http://localhost:8800/api/get/option/price"),
+      axios.get(`${ backendurl }/api/get/option/location`),
+      axios.get(`${ backendurl }/api/get/option/type`),
+      axios.get(`${ backendurl }/api/get/option/price`),
     ]);
 
     setLocationData(locationResponse.data);

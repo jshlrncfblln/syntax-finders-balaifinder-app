@@ -144,7 +144,6 @@ function Navbar() {
                         <li><CustomLink to="/about" className="underline-hover relative p-2 font-semibold">About Us</CustomLink></li>
                         <li><CustomLink to="/properties" className="underline-hover relative p-2 font-semibold">Properties</CustomLink></li>
                         <li><CustomLink to="/match_up" className="underline-hover relative p-2 font-semibold">Match Up</CustomLink></li>
-                        <li><CustomLink to="/Tester2" className="underline-hover relative p-2 font-semibold">Match Up Result</CustomLink></li>
                         {currentUser ? (
                             <li><button onClick={handleLogout} className="rounded-lg bg-sky-500 px-8 py-1.5">Logout</button></li>
                         ) : (
