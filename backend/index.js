@@ -23,7 +23,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 
 
-// -- Main SQL ALGORITHM -- 
+// -- NEW Main SQL ALGORITHM --
 app.get("/api/get", (req, res) => {
   const sqlGet = `
   SELECT *,
@@ -69,16 +69,12 @@ app.get("/api/get", (req, res) => {
             WHEN u.familysize = m.familysize THEN 0.0429 -- 4.29% weight for matching family size
             ELSE 0
           END)) AS score
-FROM userpreferencestable u
-LEFT JOIN propertiestable m ON u.type = m.type AND u.location = m.location
-HAVING score > 0
-ORDER BY score DESC;
-`;
+  FROM userpreferencestable u
+  LEFT JOIN propertiestable m ON u.type = m.type AND u.location = m.location
+  HAVING score > 0
+  ORDER BY score DESC;
+  `;
 
-
-
-
-  
     db.query(sqlGet, (error, results) => {
       if (error) {
         // handle error
@@ -89,6 +85,8 @@ ORDER BY score DESC;
       res.send(results);
     });
 });
+
+
 
 // -- GET ALL PROPERTIES FOR PROPERTY PAGE--
 app.get("/api/get/properties", (req, res) => {
