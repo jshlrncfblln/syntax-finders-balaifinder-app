@@ -11,9 +11,12 @@ function ResultSection() {
   };
 
   useEffect(() => {
-    loadData();
+    loadData(); // Load data initially
+    const intervalId = setInterval(loadData, 5000); // Refresh data every 5 seconds (adjust interval as needed)
+    
+    // Clear interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
-
   return (
       <section className="w-fit mx-auto grid grid-cols lg:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-10">
         {data.map((item, index) => (

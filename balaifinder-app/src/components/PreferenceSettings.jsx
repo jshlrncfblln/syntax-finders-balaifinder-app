@@ -51,7 +51,7 @@ function PreferenceSettings({ onClose, onSubmit }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-
+  
     // Validate form data
     if (
       Object.values(formData).some((value) => value === "")
@@ -59,18 +59,20 @@ function PreferenceSettings({ onClose, onSubmit }) {
       toast.error("Please fill out all fields");
       return;
     }
-
+  
     try {
-      const response = await axios.post("http://localhost:8800/api/post/submitpreferences", formData);
+      const response = await axios.post(`${backendurl}/api/post/submitpreferences`, formData);
       setResultsData(response.data);
       setShowResultsModal(true);
       if (onSubmit) {
-        onSubmit(response.data);
+        onSubmit(response.data); // <-- Update the state in the parent component
       }
     } catch (error) {
       console.log("Error submitting preferences:", error);
+      toast.error("Failed to submit preferences. Please try again.");
     }
   };
+  
 
   const handleCloseResultsModal = () => {
     setShowResultsModal(false);
@@ -86,7 +88,7 @@ function PreferenceSettings({ onClose, onSubmit }) {
               <GrClose />
             </button>
           </div>
-          <form onSubmit={handleSubmit} className="px-16 py-8 space-y-8 bg-white" method="POST" action="http://localhost:8800/api/post/submitpreferences">
+          <form onSubmit={handleSubmit} className="px-16 py-8 space-y-8 bg-white">
             <div className="text-center mb-4">
               <h1 className="text-3xl font-semibold">Setup your Preferences</h1>
               <p className="text-gray-600 text-base">Let us know what property you want.</p>
@@ -201,15 +203,20 @@ function PreferenceSettings({ onClose, onSubmit }) {
               <GrClose />
             </button>
             <h1 className="text-3xl font-semibold">Results</h1>
-            {/* Display results here */}
-            <ul>
-              {resultsData.map((result, index) => (
-                <li key={index}>{result}</li>
-              ))}
-            </ul>
-          </div>
+            {/* Check if resultsData is an array before mapping */}
+            {Array.isArray(resultsData) ? (
+              <ul>
+                {resultsData.map((result, index) => (
+                  <li key={index}>{result}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>Preferences Set Success</p>
+            )}
         </div>
-      )}
+  </div>
+)}
+
     </>
   );
 }

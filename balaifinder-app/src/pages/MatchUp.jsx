@@ -6,6 +6,7 @@ import ResultSection from "../components/ResultSection";
 
 export default function Introduction() {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [resultsData, setResultsData] = useState([]);
 
   const openSettingsModal = () => {
       setShowSettingsModal(true);
@@ -14,6 +15,11 @@ export default function Introduction() {
   const closeSettingsModal = () => {
       setShowSettingsModal(false);
   }
+
+  const handleSubmitPreferences = (data) => {
+    setResultsData(data);
+  };
+
     return (
         <div>
             <Navbar />
@@ -45,7 +51,7 @@ export default function Introduction() {
                         </div>
                     </div>
                 </div>
-                <ResultSection/>
+                <ResultSection resultsData={resultsData} />
             </div>
             {showSettingsModal && <PreferenceSettingsModal onClose={closeSettingsModal} />}
             <Footer/>
