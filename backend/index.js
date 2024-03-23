@@ -33,23 +33,40 @@ app.get("/api/get", (req, res) => {
         (CASE 
             WHEN u.location = m.location THEN 0.30 -- 30% weight for matching locations
           END) +
-        (CASE 
-            WHEN u.price BETWEEN m.price * 0.9 AND m.price * 1.1 THEN 0.20 -- 20% weight for matching prices within a 10% range
+          (CASE 
+            WHEN u.price BETWEEN m.price * 0.9 AND m.price * 1.1 THEN 
+              (1 - ABS(1 - u.price / m.price)) * 0.20 -- 20% weight for matching prices within a 10% range, adjust score based on percentage deviation
           ELSE 0 -- no score for mismatched prices
           END) +
         (CASE 
-            WHEN TRIM(UPPER(u.isnearschool)) = TRIM(UPPER(m.isnearschool)) THEN 0.1 -- 9% weight for matching school proximity
-            WHEN TRIM(UPPER(u.isnearschool)) IS NOT NULL AND TRIM(UPPER(m.isnearschool)) IS NOT NULL THEN -0.02 -- 2% penalty for mismatching school proximity when both values are non-null
+            WHEN TRIM(UPPER(u.isnearschool)) = TRIM(UPPER(m.isnearschool)) THEN 0.0429 -- 4.29% weight for matching school proximity
+            WHEN TRIM(UPPER(u.isnearschool)) IS NOT NULL AND TRIM(UPPER(m.isnearschool)) IS NOT NULL THEN -0.0086 -- 0.86% penalty for mismatching school proximity when both values are non-null
             ELSE 0
           END) +
         (CASE 
-            WHEN TRIM(UPPER(u.isnearchurch)) = TRIM(UPPER(m.isnearchurch)) THEN 0.1 -- 9% weight for matching church proximity
-            WHEN TRIM(UPPER(u.isnearchurch)) IS NOT NULL AND TRIM(UPPER(m.isnearchurch)) IS NOT NULL THEN -0.02 -- 2% penalty for mismatching church proximity when both values are non-null
+            WHEN TRIM(UPPER(u.isnearchurch)) = TRIM(UPPER(m.isnearchurch)) THEN 0.0429 -- 4.29% weight for matching church proximity
+            WHEN TRIM(UPPER(u.isnearchurch)) IS NOT NULL AND TRIM(UPPER(m.isnearchurch)) IS NOT NULL THEN -0.0086 -- 0.86% penalty for mismatching church proximity when both values are non-null
             ELSE 0
           END) +
         (CASE 
-            WHEN TRIM(UPPER(u.isnearmall)) = TRIM(UPPER(m.isnearmall)) THEN 0.1 -- 9% weight for matching mall proximity
-            WHEN TRIM(UPPER(u.isnearmall)) IS NOT NULL AND TRIM(UPPER(m.isnearmall)) IS NOT NULL THEN -0.02 -- 2% penalty for mismatching mall proximity when both values are non-null
+            WHEN TRIM(UPPER(u.isnearmall)) = TRIM(UPPER(m.isnearmall)) THEN 0.0429 -- 4.29% weight for matching mall proximity
+            WHEN TRIM(UPPER(u.isnearmall)) IS NOT NULL AND TRIM(UPPER(m.isnearmall)) IS NOT NULL THEN -0.0086 -- 0.86% penalty for mismatching mall proximity when both values are non-null
+            ELSE 0
+          END) +
+        (CASE 
+            WHEN u.numberofbedroom = m.numberofbedroom THEN 0.0429 -- 4.29% weight for matching number of bedrooms
+            ELSE 0
+          END) +
+        (CASE 
+            WHEN u.numberofbathroom = m.numberofbathroom THEN 0.0429 -- 4.29% weight for matching number of bathrooms
+            ELSE 0
+          END) +
+        (CASE 
+            WHEN u.typeoflot = m.typeoflot THEN 0.0429 -- 4.29% weight for matching type of lot
+            ELSE 0
+          END) +
+        (CASE 
+            WHEN u.familysize = m.familysize THEN 0.0429 -- 4.29% weight for matching family size
             ELSE 0
           END)) AS score
 FROM userpreferencestable u
@@ -57,6 +74,10 @@ LEFT JOIN propertiestable m ON u.type = m.type AND u.location = m.location
 HAVING score > 0
 ORDER BY score DESC;
 `;
+
+
+
+
   
     db.query(sqlGet, (error, results) => {
       if (error) {
