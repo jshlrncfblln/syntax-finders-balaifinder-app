@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { backendurl } from "../../backend-connector";
 
 function ResultSection() {
@@ -21,7 +22,7 @@ function ResultSection() {
       <section className="w-fit mx-auto grid grid-cols lg:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-10">
         {data.map((item, index) => (
           <div key={item.id} className="w-72 bg-white shadow-md rounded-xl hover:shadow-sky-600 duration-500 hover:scale-105 hover:shadow-xl">
-            <a href="/property-details">
+            <Link to={`/details/${item.id}`}>
               <img src="https://img.freepik.com/free-photo/house-isolated-field_1303-23773.jpg?t=st=1710318322~exp=1710321922~hmac=1797b6b00add732c13f15b3160cb99f3c7e6fe2e9fb745a53d801c74a968fe8b&w=1380" alt="Product" className="h-80 w-72 object-cover rounded-t-xl" />
               <div className="px-4 py-3 w-72">
                 <span className="text-gray-400 mr-3 uppercase text-xs">{item.type}</span>
@@ -46,7 +47,7 @@ function ResultSection() {
                   </div>
                 </div>
               </div>
-            </a>
+            </Link>
           </div>
         ))}
       </section>
