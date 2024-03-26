@@ -5,6 +5,16 @@ import userRoutes from "./routes/users.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { db } from "./connect.js";
+import path from 'path'
+
+
+app.use(express.static(path.join(process.cwd(), 'public')));
+
+app.get('', (req, res) => {
+  // Send the HTML file as the response
+  res.sendFile(path.join(process.cwd(), 'index.html'));
+});
+
 
 //middleware
 app.use((req, res, next) => {
