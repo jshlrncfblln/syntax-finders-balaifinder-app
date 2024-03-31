@@ -6,15 +6,14 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { db } from "./connect.js";
 import path from 'path'
-
+import jwt from "jsonwebtoken";
+import { showAlgorithmResult } from "./controllers/algorithm.js";
 
 app.use(express.static(path.join(process.cwd(), 'public')));
-
 app.get('', (req, res) => {
   // Send the HTML file as the response
   res.sendFile(path.join(process.cwd(), 'index.html'));
 });
-
 
 //middleware
 app.use((req, res, next) => {
@@ -29,72 +28,194 @@ app.use(
 );
 app.use(cookieParser());
 
+
+app.use((req, res, next) => {
+  const token = req.cookies.accessToken; // Extract JWT token from cookies
+  if (token) {
+    try {
+      const decodedToken = jwt.verify(token, "secretkey");
+      req.user = decodedToken; // Attach user object to request
+    } catch (error) {
+      console.error('Error verifying JWT token:', error);
+    }
+  }
+  next();
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.get("/api/get", showAlgorithmResult);
 
+// -- SET USER PREFERENCES
+app.post("/api/post/submitpreferences", (req, res) => {
+  const { location, house_type, price, near_elementary, near_highschool, near_college, businessready, near_church, near_mall, bedroom, bathroom, familysize, typeoflot} = req.body;
 
-// -- NEW Main SQL ALGORITHM --
-app.get("/api/get", (req, res) => {
-  const sqlGet = `
-  SELECT *,
-       ((CASE 
-            WHEN u.type = m.type THEN 0.20 -- 20% weight for matching types
-          END) +
-        (CASE 
-            WHEN u.location = m.location THEN 0.30 -- 30% weight for matching locations
-          END) +
-          (CASE 
-            WHEN u.price BETWEEN m.price * 0.9 AND m.price * 1.1 THEN 
-              (1 - ABS(1 - u.price / m.price)) * 0.20 -- 20% weight for matching prices within a 10% range, adjust score based on percentage deviation
-          ELSE 0 -- no score for mismatched prices
-          END) +
-        (CASE 
-            WHEN TRIM(UPPER(u.isnearschool)) = TRIM(UPPER(m.isnearschool)) THEN 0.0429 -- 4.29% weight for matching school proximity
-            WHEN TRIM(UPPER(u.isnearschool)) IS NOT NULL AND TRIM(UPPER(m.isnearschool)) IS NOT NULL THEN -0.0086 -- 0.86% penalty for mismatching school proximity when both values are non-null
-            ELSE 0
-          END) +
-        (CASE 
-            WHEN TRIM(UPPER(u.isnearchurch)) = TRIM(UPPER(m.isnearchurch)) THEN 0.0429 -- 4.29% weight for matching church proximity
-            WHEN TRIM(UPPER(u.isnearchurch)) IS NOT NULL AND TRIM(UPPER(m.isnearchurch)) IS NOT NULL THEN -0.0086 -- 0.86% penalty for mismatching church proximity when both values are non-null
-            ELSE 0
-          END) +
-        (CASE 
-            WHEN TRIM(UPPER(u.isnearmall)) = TRIM(UPPER(m.isnearmall)) THEN 0.0429 -- 4.29% weight for matching mall proximity
-            WHEN TRIM(UPPER(u.isnearmall)) IS NOT NULL AND TRIM(UPPER(m.isnearmall)) IS NOT NULL THEN -0.0086 -- 0.86% penalty for mismatching mall proximity when both values are non-null
-            ELSE 0
-          END) +
-        (CASE 
-            WHEN u.numberofbedroom = m.numberofbedroom THEN 0.0429 -- 4.29% weight for matching number of bedrooms
-            ELSE 0
-          END) +
-        (CASE 
-            WHEN u.numberofbathroom = m.numberofbathroom THEN 0.0429 -- 4.29% weight for matching number of bathrooms
-            ELSE 0
-          END) +
-        (CASE 
-            WHEN u.typeoflot = m.typeoflot THEN 0.0429 -- 4.29% weight for matching type of lot
-            ELSE 0
-          END) +
-        (CASE 
-            WHEN u.familysize = m.familysize THEN 0.0429 -- 4.29% weight for matching family size
-            ELSE 0
-          END)) AS score
-  FROM userpreferencestable u
-  LEFT JOIN propertiestable m ON u.type = m.type AND u.location = m.location
-  HAVING score > 0
-  ORDER BY score DESC;
-  `;
+  // Check if any of the submitted values are the default placeholder values
+  if (
+    location === "Please Select" ||
+    house_type === "Please Select" ||
+    price === "Please Select" ||
+    near_elementary === "Please Select" ||
+    near_highschool === "Please Select" ||
+    near_college === "Please Select" ||
+    near_church === "Please Select" ||
+    businessready === "Please Select" ||
+    near_mall === "Please Select" ||
+    bedroom === "Please Select" ||
+    bathroom === "Please Select" 
+  ) {
+      res.status(400).send("Please select valid preferences");
+      return;
+  }
 
-    db.query(sqlGet, (error, results) => {
-      if (error) {
-        // handle error
-        console.error("Error executing query:", error);
-        return res.status(500).json({ message: "Internal server error." });
+  const updatepref = `
+    UPDATE userpreferencestable
+    SET type = ?, location = ?, price = ?, nearelementary = ?, nearhighschool = ?, nearcollege = ?, businessready = ?, isnearchurch = ?, isnearmall = ?, numberofbedroom = ?, numberofbathroom = ?, familysize = ?, typeoflot = ?
+    WHERE id = 1`; // Assuming user_id is 1
+
+  db.query(updatepref, [house_type, location, price, near_elementary, near_highschool, near_college, businessready, near_church, near_mall, bedroom, bathroom, familysize, typeoflot], (err, result) => {
+      if (err) {
+          console.error("Error updating preference:", err);
+          res.status(500).send("Error updating preference");
+          return;
       }
-  
-      res.send(results);
-    });
+      if (result.affectedRows === 0) {
+          // If no rows were affected, it means there was no existing preference for the user
+          res.status(404).send("No preference found for the user");
+          return;
+      }
+      console.log('Your preferences are all set check if you got a match');
+      // Sending success response
+      res.send('Your preferences are all set check if you got a match');
+  });
 });
+
+// -- SET USER PRIORITY
+app.post("/api/post/submitpriority", (req, res) => {
+  const {
+    location,
+    type,
+    price,
+    nearelementary,
+    nearhighschool,
+    nearcollege,
+    nearmall,
+    nearchurch,
+    bedroom,
+    bathroom,
+    familysize,
+    businessready,
+    lottype
+  } = req.body;
+
+  // Extract user_id from JWT token
+  const token = req.cookies.accessToken;
+  const decodedToken = jwt.verify(token, "secretkey");
+  const userId = decodedToken.id;
+
+  // Check if the user already has preferences in the userprioritytable
+  const sqlCheckExistence = `SELECT * FROM userprioritytable WHERE user_id = ?`;
+
+  db.query(sqlCheckExistence, [userId], (err, result) => {
+    if (err) {
+      console.error("Error checking existence in userprioritytable:", err);
+      return res.status(500).json({ error: "Error checking existence in userprioritytable" });
+    }
+
+    if (result.length > 0) {
+      // If preferences exist, update them
+      const sqlUpdatePriority = `UPDATE userprioritytable SET
+        locationpriority = ?,
+        typepriority = ?,
+        pricepriority = ?,
+        isnearelementarypriority = ?,
+        isnearhighschoolpriority = ?,
+        isnearcollegepriority = ?,
+        isnearmallpriority = ?,
+        isnearchurchpriority = ?,
+        bedroompriority = ?,
+        bathroompriority = ?,
+        familysizepriority = ?,
+        businessreadypriority = ?,
+        lottypepriority = ?
+        WHERE user_id = ?`;
+
+      const values = [
+        location,
+        type,
+        price,
+        nearelementary,
+        nearhighschool,
+        nearcollege,
+        nearmall,
+        nearchurch,
+        bedroom,
+        bathroom,
+        familysize,
+        businessready,
+        lottype,
+        userId
+      ];
+
+      db.query(sqlUpdatePriority, values, (err, result) => {
+        if (err) {
+          console.error("Error updating preferences:", err);
+          res.status(500).json({ error: "Error updating preferences" });
+          return;
+        }
+        console.log("Preferences updated successfully");
+        res.json({ message: "Preferences updated successfully" });
+      });
+    } else {
+      // If preferences don't exist, insert them
+      const sqlInsertPriority = `INSERT INTO userprioritytable (
+        user_id,
+        locationpriority,
+        typepriority,
+        pricepriority,
+        isnearelementarypriority,
+        isnearhighschoolpriority,
+        isnearcollegepriority,
+        isnearmallpriority,
+        isnearchurchpriority,
+        bedroompriority,
+        bathroompriority,
+        familysizepriority,
+        businessreadypriority,
+        lottypepriority
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+      const values = [
+        userId,
+        location,
+        type,
+        price,
+        nearelementary,
+        nearhighschool,
+        nearcollege,
+        nearmall,
+        nearchurch,
+        bedroom,
+        bathroom,
+        familysize,
+        businessready,
+        lottype
+      ];
+
+      db.query(sqlInsertPriority, values, (err, result) => {
+        if (err) {
+          console.error("Error inserting preferences:", err);
+          res.status(500).json({ error: "Error inserting preferences" });
+          return;
+        }
+        console.log("Preferences inserted successfully");
+        res.json({ message: "Preferences inserted successfully" });
+      });
+    }
+  });
+});
+
+
 
 
 // -- GET PRODUCT DETAILS BY ID --
@@ -112,8 +233,6 @@ app.get("/api/get/properties/:id", (req, res) => {
     res.json(result[0]); // Assuming there's only one product with the given ID
   });
 });
-
-
 
 // -- GET ALL PROPERTIES FOR PROPERTY PAGE--
 app.get("/api/get/properties", (req, res) => {
@@ -168,46 +287,62 @@ app.get("/api/get/option/price", (req, res) => {
 });
 
 
-// -- SET USER PREFERENCES
-app.post("/api/post/submitpreferences", (req, res) => {
-  const { location, house_type, price, near_school, near_church, near_mall, bedroom, bathroom, familysize, typeoflot} = req.body;
+//ALD
 
-  // Check if any of the submitted values are the default placeholder values
-  if (
-    location === "Please Select" ||
-    house_type === "Please Select" ||
-    price === "Please Select" ||
-    near_school === "Please Select" ||
-    near_church === "Please Select" ||
-    near_mall === "Please Select" ||
-    bedroom === "Please Select" ||
-    bathroom === "Please Select" 
-  ) {
-      res.status(400).send("Please select valid preferences");
-      return;
+// Endpoint for inserting Property data based on action
+app.post("/api/post/ald", (req, res) => {
+  const { productId, action } = req.body;
+
+  // Extract user_id from JWT token
+  const token = req.cookies.accessToken;
+  const decodedToken = jwt.verify(token, "secretkey");
+  const userId = decodedToken.id;
+
+  let tableName = '';
+
+  // Determine the table name based on action
+  switch (action) {
+    case 'ACCEPT':
+      tableName = 'useraccepttable';
+      break;
+    case 'LIKE':
+      tableName = 'userliketable';
+      break;
+    case 'DENY':
+      tableName = 'userdenytable';
+      break;
+    default:
+      return res.status(400).json({ error: 'Invalid action' });
   }
 
-  const updatepref = `
-    UPDATE userpreferencestable
-    SET type = ?, location = ?, price = ?, isnearschool = ?, isnearchurch = ?, isnearmall = ?, numberofbedroom = ?, numberofbathroom = ?, familysize = ?, typeoflot = ?
-    WHERE id = 1`; // Assuming user_id is 1
+  // Check if the combination of user_id and product_id already exists
+  const sqlCheckExistence = `SELECT * FROM ${tableName} WHERE user_id = ? AND property_id = ?`;
 
-  db.query(updatepref, [house_type, location, price, near_school, near_church, near_mall, bedroom, bathroom, familysize, typeoflot], (err, result) => {
+  db.query(sqlCheckExistence, [userId, productId], (err, result) => {
+    if (err) {
+      console.error(`Error checking existence in ${tableName}:`, err);
+      return res.status(500).json({ error: `Error checking existence in ${tableName}` });
+    }
+
+    // If the result contains any rows, it means the combination already exists
+    if (result.length > 0) {
+      return res.status(400).json({ message: `User has already ${action.toLowerCase()}ed this property` });
+    }
+
+    // Insert product ID and user ID into the respective table
+    const sqlInsertProductId = `INSERT INTO ${tableName} (user_id, property_id) VALUES (?, ?)`;
+
+    db.query(sqlInsertProductId, [userId, productId], (err, result) => {
       if (err) {
-          console.error("Error updating preference:", err);
-          res.status(500).send("Error updating preference");
-          return;
+        console.error(`Error inserting product ID into ${tableName}:`, err);
+        return res.status(500).json({ error: `Error inserting product ID into ${tableName}` });
       }
-      if (result.affectedRows === 0) {
-          // If no rows were affected, it means there was no existing preference for the user
-          res.status(404).send("No preference found for the user");
-          return;
-      }
-      console.log('Your preferences are all set check if you got a match');
-      // Sending success response
-      res.send('Your preferences are all set check if you got a match');
+      console.log(`Product ID inserted successfully into ${tableName}`);
+      res.json({ message: `Product ID inserted successfully into ${tableName}` });
+    });
   });
 });
+
 
 
 

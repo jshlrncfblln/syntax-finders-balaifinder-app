@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import { backendurl } from "../../backend-connector";
 import Navbar from "../components/navbar";
 import Footer from "../components/Footer";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const PropertyDetails = () => {
   const { id } = useParams();
@@ -23,13 +25,44 @@ const PropertyDetails = () => {
     }
   };
 
+  const handleAcceptClick = (productId) => {
+    sendProductData(productId, 'ACCEPT');
+  };
+
+  const handleLikeClick = (productId) => {
+    sendProductData(productId, 'LIKE');
+  };
+
+  const handleDenyClick = (productId) => {
+    sendProductData(productId, 'DENY');
+  };
+
+  const sendProductData = (productId, action) => {
+    axios.post(`${backendurl}/api/post/ald`, {
+      productId: productId,
+      action: action
+    }, { withCredentials: true }) // Send cookies with the request
+      .then(response => {
+        console.log(response.data);
+        // Handle success if needed
+      }).catch(error => {
+        if (error.response && error.response.status === 400) {
+          toast.error("Product data already exists for this user and property");
+        } else {
+          console.error("Error inserting product data:", error);
+        }
+      });
+  };
+
   if (!product || Object.keys(product).length === 0) {
     return <div>Loading...</div>;
   }
 
+
   return (
     <div>
-      <Navbar/>
+      <Navbar/> 
+      
       <div class="bg-gray-100 dark:bg-gray-800 py-8">
               <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                   <div class="flex flex-col md:flex-row -mx-4">
@@ -43,12 +76,17 @@ const PropertyDetails = () => {
                           </div>
                           <div class="flex -mx-2 mb-4">
                               <div class="w-1/2 px-2">
-                                  <button class="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700">
+                                  <button type="submit" onClick={() => handleAcceptClick(product.id)} class="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700">
                                       ACCEPT
                                   </button>
                               </div>
                               <div class="w-1/2 px-2">
-                                  <button class="w-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white py-2 px-4 rounded-full font-bold hover:bg-gray-300 dark:hover:bg-gray-600">
+                                  <button type="submit" onClick={() => handleLikeClick(product.id)} class="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700">
+                                      LIKE
+                                  </button>
+                              </div>
+                              <div class="w-1/2 px-2">
+                                  <button type="submit" onClick={() => handleDenyClick(product.id)} class="w-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white py-2 px-4 rounded-full font-bold hover:bg-gray-300 dark:hover:bg-gray-600">
                                       DENY
                                   </button>
                               </div>
@@ -116,7 +154,7 @@ const PropertyDetails = () => {
                               </div>
                               <div>
                                   <span class="font-bold text-gray-700 dark:text-gray-300">Business Space Ready = </span>
-                                  <span class="text-gray-600 dark:text-gray-300">{product.plantodobusiness}</span>
+                                  <span class="text-gray-600 dark:text-gray-300">{product.businessready}</span>
                               </div>
                           </div>
                           <div>

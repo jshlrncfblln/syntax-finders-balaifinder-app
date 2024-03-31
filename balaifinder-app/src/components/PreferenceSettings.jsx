@@ -14,8 +14,11 @@ function PreferenceSettings({ onClose, onSubmit }) {
     location: "",
     house_type: "",
     near_mall: "",
-    near_school: "",
+    near_elementary: "",
+    near_highschool: "",
+    near_college: "",
     near_church: "",
+    businessready: "",
     bedroom: "",
     bathroom: "",
     familysize: "",
@@ -94,17 +97,7 @@ function PreferenceSettings({ onClose, onSubmit }) {
               <p className="text-gray-600 text-base">Let us know what property you want.</p>
             </div>
             <div className="grid grid-cols-2 gap-y-8 gap-x-24">
-              <div className="space-y-2 flex flex-col">
-                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 w-full text-center uppercase">Price</label>
-                <select name="price" value={formData.price} onChange={handleChange} className="flex h-10 w-full items-center justify-between bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 rounded-full border-sky-500 border-[3px]">
-                  <option selected disabled hidden value="">Please Select</option>
-                  {priceData.map((item, index) => (
-                    <option key={index} value={item.price}>
-                      {item.price}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              
               {/* Other select elements */}
               <div className="flex flex-col mb-4">
             <label className="text-center uppercase">Location</label>
@@ -124,6 +117,17 @@ function PreferenceSettings({ onClose, onSubmit }) {
                 ))}
             </select>
         </div>
+        <div className="space-y-2 flex flex-col">
+                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 w-full text-center uppercase">Price</label>
+                <select name="price" value={formData.price} onChange={handleChange} className="flex h-10 w-full items-center justify-between bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 rounded-full border-sky-500 border-[3px]">
+                  <option selected disabled hidden value="">Please Select</option>
+                  {priceData.map((item, index) => (
+                    <option key={index} value={item.price}>
+                      {item.price}
+                    </option>
+                  ))}
+                </select>
+          </div>
         <div className="flex flex-col mb-4">
             <label className="text-center uppercase">Near a Mall?</label>
             <select name="near_mall" value={formData.mall} onChange={handleChange} className="flex h-10 w-full items-center justify-between bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 rounded-full border-sky-500 border-[3px]">
@@ -133,8 +137,32 @@ function PreferenceSettings({ onClose, onSubmit }) {
             </select>
         </div>
         <div className="flex flex-col mb-4">
-            <label className="text-center uppercase">Near a School?</label>
-            <select name="near_school" value={formData.near_school} onChange={handleChange} className="flex h-10 w-full items-center justify-between bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 rounded-full border-sky-500 border-[3px]">
+            <label className="text-center uppercase">Near an Elementary School?</label>
+            <select name="near_elementary" value={formData.near_elementary} onChange={handleChange} className="flex h-10 w-full items-center justify-between bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 rounded-full border-sky-500 border-[3px]">
+                <option selected disabled hidden value="">Please Select</option>
+                <option value="YES">YES</option>
+                <option value="NO">NO</option>
+            </select>
+        </div>
+        <div className="flex flex-col mb-4">
+            <label className="text-center uppercase">Near an High School?</label>
+            <select name="near_highschool" value={formData.near_highschool} onChange={handleChange} className="flex h-10 w-full items-center justify-between bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 rounded-full border-sky-500 border-[3px]">
+                <option selected disabled hidden value="">Please Select</option>
+                <option value="YES">YES</option>
+                <option value="NO">NO</option>
+            </select>
+        </div>
+        <div className="flex flex-col mb-4">
+            <label className="text-center uppercase">Near an College University?</label>
+            <select name="near_college" value={formData.near_college} onChange={handleChange} className="flex h-10 w-full items-center justify-between bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 rounded-full border-sky-500 border-[3px]">
+                <option selected disabled hidden value="">Please Select</option>
+                <option value="YES">YES</option>
+                <option value="NO">NO</option>
+            </select>
+        </div>
+        <div className="flex flex-col mb-4">
+            <label className="text-center uppercase">Business Space Ready?</label>
+            <select name="businessready" value={formData.businessready} onChange={handleChange} className="flex h-10 w-full items-center justify-between bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 rounded-full border-sky-500 border-[3px]">
                 <option selected disabled hidden value="">Please Select</option>
                 <option value="YES">YES</option>
                 <option value="NO">NO</option>
