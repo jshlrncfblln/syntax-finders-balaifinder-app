@@ -132,10 +132,6 @@ const PropertyDetails = () => {
                                   <span class="font-bold text-gray-700 dark:text-gray-300">Near a College University = </span>
                                   <span class="text-gray-600 dark:text-gray-300">{product.nearcollege}</span>
                               </div>
-                              <div>
-                                  <span class="font-bold text-gray-700 dark:text-gray-300">Near a HighSchool = </span>
-                                  <span class="text-gray-600 dark:text-gray-300">{product.numberofbathroom}</span>
-                              </div>
                           </div>
                           <div class="flex mb-4">
                               <div class="mr-4">

@@ -287,8 +287,7 @@ app.get("/api/get/option/price", (req, res) => {
 });
 
 
-//ALD
-
+//ALD TRIPLE BABY
 // Endpoint for inserting Property data based on action
 app.post("/api/post/ald", (req, res) => {
   const { productId, action } = req.body;
