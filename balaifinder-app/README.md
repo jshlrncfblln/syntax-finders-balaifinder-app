@@ -1,2 +1,0 @@
-# syntax-finders-balaifinder-app
- 
